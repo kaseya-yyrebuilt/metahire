@@ -53,27 +53,37 @@ public class RegisterControl : MonoBehaviour
 
         registerButton.onClick.AddListener(() =>
         {
-            if (emailInputField.text == string.Empty)
+            string email = emailInputField.text, 
+                username = usernameInputField.text, 
+                password = passwordInputField.text, 
+                confirm  = confirmInputField.text;
+
+            if (string.IsNullOrWhiteSpace(email))
             {
                 errorText.text = "The email cannot be empty!";
                 return;
             }
-            else if (usernameInputField.text == string.Empty)
+            if (string.IsNullOrWhiteSpace(username))
             {
                 errorText.text = "The username cannot be empty!";
                 return;
             }
-            else if (passwordInputField.text == string.Empty)
+            if (string.IsNullOrWhiteSpace(password))
             {
                 errorText.text = "The password cannot be empty!";
                 return;
             }
-            else if (confirmInputField.text == string.Empty)
+            if (string.IsNullOrWhiteSpace(confirm))
             {
                 errorText.text = "The confirm cannot be empty!";
                 return;
             }
-            else if (confirmInputField.text != passwordInputField.text)
+            if (password.Length < 6)
+            {
+                errorText.text = "The password should not be less than 6 letters!";
+                return;
+            }
+            if (confirm != password)
             {
                 errorText.text = "The passwords entered are different!";
                 return;
@@ -81,20 +91,22 @@ public class RegisterControl : MonoBehaviour
 
             RegisterPlayFabUserRequest registerRequest = new RegisterPlayFabUserRequest()
             {
-                Email = emailInputField.text,
-                Password = passwordInputField.text,
-                Username = usernameInputField.text
+                Email = email,
+                Password = password,
+                Username = username
             };
+            
             PlayFabClientAPI.RegisterPlayFabUser(registerRequest,
             registerResult =>
             {
                 SetActive(false);
                 errorText.text = string.Empty;
                 loginControl.SetActive(true);
-                loginEmailInputField.text = emailInputField.text;
+                loginEmailInputField.text = email;
             },
             loginError =>
             {
+                Debug.LogWarning($"{loginError.Error}");
                 errorText.text = loginError.ErrorMessage;
                 Debug.LogError(loginError.ErrorMessage);
             });
