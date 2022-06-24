@@ -1,48 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using Photon.Pun;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    public GameObject readyButton;
-    public GameObject RubyButton;
-    public GameObject RobotButton;
-    public GameObject Canvas;
-    private string character = "Ruby";
-    public GameObject RubyFrame;
-    public GameObject RobotFrame;
-    public Text PingText;
 
-    private void Start()
-    {
-        RubyFrame.SetActive(true);
-        RobotFrame.SetActive(false);
-    }
+    [SerializeField]
+    private Canvas Canvas;
 
-    private void Update()
-    {
-        PingText.text = "Ping: " + PhotonNetwork.GetPing();
-    }
+    [SerializeField]
+    private ToggleGroup toggle;
 
-    public void ChooseRuby()
-    {
-        character = "Ruby";
-        RubyFrame.SetActive(true);
-        RobotFrame.SetActive(false);
-    }
+    [SerializeField]
+    private GameObject NextCanvas;
 
-    public void ChooseRobot()
+    private string character;
+
+    private void getCharacter()
     {
-        character = "Robot";
-        RubyFrame.SetActive(false);
-        RobotFrame.SetActive(true);
+        if (!toggle || !toggle.AnyTogglesOn())
+        {
+            Debug.LogWarning("Toggle is not available");
+            return;
+        }
+        
+        Toggle[] t = toggle.ActiveToggles().Cast<Toggle>().ToArray();
+        if (t.Length != 1)
+        {
+            Debug.LogWarning("More than 1 character selected");
+        }
+        else
+        {
+            string cname = t[0].gameObject.name;
+            if (cname.Contains("Ruby")) character = "Ruby";
+            else if (cname.Contains("MrClock")) character = "Robot";
+        }
     }
 
     public void ReadyToPlay()
     {
-        Canvas.SetActive(false);
+        Canvas.enabled = false;
+        getCharacter();
+        if (string.IsNullOrEmpty(character)) character = "Ruby";
         PhotonNetwork.Instantiate(character, new Vector3(1, 1, 0), Quaternion.identity, 0);
+        NextCanvas.SetActive(true);
     }
 }

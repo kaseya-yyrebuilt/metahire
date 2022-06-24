@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+using ExitGames.Client.Photon;
+using Photon.Chat;
+using Photon.Pun;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
-using Photon.Chat;
-using ExitGames.Client.Photon;
 
 public class ChatControl : MonoBehaviour, IChatClientListener
 {
@@ -21,6 +19,9 @@ public class ChatControl : MonoBehaviour, IChatClientListener
     private GameObject messageTextP;
     [SerializeField]
     private InputField messageInputField;
+    [SerializeField]
+    private Text PingText;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,6 +55,7 @@ public class ChatControl : MonoBehaviour, IChatClientListener
         {
             PlayerController.playerControlsEnabled = true;
         }
+        if (PingText) PingText.text = "Ping: " + PhotonNetwork.GetPing();
     }
     private void CreateMessage(string sender, string message)
     {
