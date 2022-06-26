@@ -2,6 +2,7 @@ using ExitGames.Client.Photon;
 using Photon.Chat;
 using Photon.Pun;
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,9 +19,9 @@ public class ChatControl : MonoBehaviour, IChatClientListener
     [SerializeField]
     private GameObject messageTextP;
     [SerializeField]
-    private InputField messageInputField;
+    private TMP_InputField messageInputField;
     [SerializeField]
-    private Text PingText;
+    private TextMeshProUGUI PingText;
 
     // Start is called before the first frame update
     void Start()
@@ -30,7 +31,7 @@ public class ChatControl : MonoBehaviour, IChatClientListener
 
         messageInputField.onEndEdit.AddListener(message =>
         {
-            if (message != string.Empty)
+            if (!string.IsNullOrEmpty(message))
             {
                 chatClient.PublishMessage(channelName, message);
                 messageInputField.text = string.Empty;
@@ -42,42 +43,39 @@ public class ChatControl : MonoBehaviour, IChatClientListener
         chatClient.ChatRegion = "asia";
         chatClient.Connect(appSettings.AppIdChat, appSettings.AppVersion, new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
         channelName = PhotonNetwork.CloudRegion + PhotonNetwork.CurrentRoom.Name;
+        messageInputField.onSelect.AddListener(_ => PlayerController.playerControlsEnabled = false);
+        messageInputField.onDeselect.AddListener(_ => PlayerController.playerControlsEnabled = true);
     }
     // Update is called once per frame
     void Update()
     {
         chatClient?.Service();
-        if (messageInputField.GetComponent<InputField>().isFocused == true)
-        {
-            PlayerController.playerControlsEnabled = false;
-        }
-        else
-        {
-            PlayerController.playerControlsEnabled = true;
-        }
-        if (PingText) PingText.text = "Ping: " + PhotonNetwork.GetPing();
+        if (PingText) PingText.text = $"Ping: {PhotonNetwork.GetPing()}";
     }
     private void CreateMessage(string sender, string message)
     {
-        Text messageText = Instantiate<GameObject>(messageTextP).GetComponent<Text>();
+        TextMeshProUGUI messageText = Instantiate(messageTextP).GetComponent<TextMeshProUGUI>();
         messageText.text = $"{DateTime.Now.ToString("[hh:mm:ss]")}<color={(sender == PhotonNetwork.LocalPlayer.NickName ? "red" : "green")}>{sender}:</color>{message}";
         messageText.transform.SetParent(contentT, false);
         LayoutRebuilder.ForceRebuildLayoutImmediate(messageScrollRect.GetComponent<RectTransform>());
         messageScrollRect.verticalNormalizedPosition = 0f;
     }
+
     public void DebugReturn(DebugLevel level, string message)
     {
-        if (level == ExitGames.Client.Photon.DebugLevel.ERROR)
+        switch (level)
         {
-            Debug.LogError(message);
-        }
-        else if (level == ExitGames.Client.Photon.DebugLevel.WARNING)
-        {
-            Debug.LogWarning(message);
-        }
-        else
-        {
-            Debug.Log(message);
+            case DebugLevel.ERROR:
+                Debug.LogError(message);
+                break;
+
+            case DebugLevel.WARNING:
+                Debug.LogWarning(message);
+                break;
+
+            case DebugLevel.INFO:
+                Debug.Log(message);
+                break;
         }
     }
     public void OnDisconnected()

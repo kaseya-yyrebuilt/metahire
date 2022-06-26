@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class sceneloader : MonoBehaviour
 {
-    [System.Obsolete]
+
     void Update()
     {
         // Create a temporary reference to the current scene.
@@ -16,7 +16,7 @@ public class sceneloader : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Application.LoadLevel("mainlogin");
+            SceneManager.LoadScene("mainlogin");
         }
         else
         {

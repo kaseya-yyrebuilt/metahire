@@ -9528,16 +9528,16 @@ MonoBehaviour:
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 11400000, guid: ae98c51b223ce42a3bb998d80feb3cf3, type: 2}
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 11400000, guid: ae98c51b223ce42a3bb998d80feb3cf3, type: 2}
     italicTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 11400000, guid: ae98c51b223ce42a3bb998d80feb3cf3, type: 2}
+    italicTypeface: {fileID: 11400000, guid: ae98c51b223ce42a3bb998d80feb3cf3, type: 2}
+  - regularTypeface: {fileID: 11400000, guid: db23bb2ea982a4c52b5dd9954cba81c4, type: 2}
+    italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 11400000, guid: 84509e86e150f4edbae2bce04ac99050, type: 2}
-    italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
-    italicTypeface: {fileID: 0}
+    italicTypeface: {fileID: 11400000, guid: 84509e86e150f4edbae2bce04ac99050, type: 2}
   fontWeights: []
   normalStyle: 0
   normalSpacingOffset: 0

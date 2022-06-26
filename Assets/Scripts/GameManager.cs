@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private ToggleGroup toggle;
 
     [SerializeField]
-    private GameObject NextCanvas;
+    private Canvas NextCanvas;
 
     private string character;
 
@@ -43,7 +43,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         Canvas.enabled = false;
         getCharacter();
         if (string.IsNullOrEmpty(character)) character = "Ruby";
-        PhotonNetwork.Instantiate(character, new Vector3(1, 1, 0), Quaternion.identity, 0);
-        NextCanvas.SetActive(true);
+        NextCanvas.enabled = true;
+        GameObject respawn = GameObject.FindGameObjectWithTag("Respawn");
+        Vector3 respawnPos = respawn? respawn.transform.position + new Vector3(0,-1f,0) : new Vector3(1, 1, 0);
+        PhotonNetwork.Instantiate(character, respawnPos, Quaternion.identity, 0);
     }
 }
