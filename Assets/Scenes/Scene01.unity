@@ -5476,7 +5476,6 @@ GameObject:
   - component: {fileID: 745725026}
   - component: {fileID: 745725025}
   - component: {fileID: 745725024}
-  - component: {fileID: 745725023}
   m_Layer: 5
   m_Name: GameCanvas
   m_TagString: Untagged
@@ -5484,23 +5483,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &745725023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 745725022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 32
 --- !u!114 &745725024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5531,7 +5513,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 745725022}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -5541,7 +5523,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 7
   m_TargetDisplay: 0
@@ -6371,7 +6353,7 @@ MonoBehaviour:
   m_RichText: 1
   m_GlobalFontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_OnFocusSelectAll: 1
-  m_ResetOnDeActivation: 1
+  m_ResetOnDeActivation: 0
   m_RestoreOriginalTextOnEscape: 1
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
@@ -6677,7 +6659,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1013636665}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
@@ -6687,7 +6669,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
   m_SortingOrder: 6
   m_TargetDisplay: 0
@@ -6706,7 +6688,7 @@ RectTransform:
   - {fileID: 856357183}
   - {fileID: 645384020}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -6725,9 +6707,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9d47fa3bbde1341a810e97e224c12c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Canvas: {fileID: 1013636668}
-  toggle: {fileID: 816182982}
-  NextCanvas: {fileID: 745725025}
+  _canvas: {fileID: 1013636668}
+  _toggle: {fileID: 816182982}
+  _nextCanvas: {fileID: 745725025}
 --- !u!1 &1015244430
 GameObject:
   m_ObjectHideFlags: 0
@@ -13542,7 +13524,7 @@ Transform:
   - {fileID: 1279867626}
   - {fileID: 144260462}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1699807332
 PrefabInstance:
@@ -14207,8 +14189,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1875592002}
-  - component: {fileID: 1875592004}
   - component: {fileID: 1875592003}
+  - component: {fileID: 1875592004}
+  - component: {fileID: 1875592005}
   m_Layer: 5
   m_Name: Chat
   m_TagString: Untagged
@@ -14250,25 +14233,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326f533cc2e666c48b5008718c5bf12d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisCanvasGroup: {fileID: 1875592004}
-  messageScrollRect: {fileID: 2053203725}
-  contentT: {fileID: 1015244431}
-  messageTextP: {fileID: 3077137616618898836, guid: c4707b006fe046246930db02aaa69ab8,
+  _contentT: {fileID: 1015244431}
+  _messageInputField: {fileID: 836110207}
+  _messageScrollRect: {fileID: 2053203725}
+  _messageTextP: {fileID: 3077137616618898836, guid: c4707b006fe046246930db02aaa69ab8,
     type: 3}
-  messageInputField: {fileID: 836110207}
-  PingText: {fileID: 1644370690}
---- !u!225 &1875592004
-CanvasGroup:
+  _pingText: {fileID: 1644370690}
+  _thisCanvas: {fileID: 1875592004}
+--- !u!223 &1875592004
+Canvas:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1875592001}
   m_Enabled: 1
-  m_Alpha: 1
-  m_Interactable: 1
-  m_BlocksRaycasts: 1
-  m_IgnoreParentGroups: 0
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!114 &1875592005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875592001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 32
 --- !u!1 &1883251551
 GameObject:
   m_ObjectHideFlags: 0
@@ -14670,9 +14679,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32093d15cfd4e440a4c42a37bc93982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tipImage: {fileID: 2140636413}
-  enterRoomImage: {fileID: 618829887}
-  voiceTriggerArea: {fileID: 1909166540}
+  _tipImage: {fileID: 2140636413}
+  _enterRoomImage: {fileID: 618829887}
+  _voiceTriggerArea: {fileID: 1909166540}
 --- !u!61 &1909166540
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14697,7 +14706,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 6.55, y: 4.2}
+  m_Size: {x: 7.5, y: 5.6}
   m_EdgeRadius: 0
 --- !u!1001 &1911314222
 PrefabInstance:
@@ -15544,13 +15553,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3457d613e654b9041a9618e6342cbcc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginUI: {fileID: 0}
-  nameUI: {fileID: 0}
-  roomName: {fileID: 0}
-  nameInputField: {fileID: 0}
-  emailNameInputField: {fileID: 0}
-  passwordInputField: {fileID: 0}
-  errorText: {fileID: 0}
+  _loginUI: {fileID: 0}
+  _nameUI: {fileID: 0}
+  _roomName: {fileID: 0}
+  _nameInputField: {fileID: 0}
+  _emailNameInputField: {fileID: 0}
+  _passwordInputField: {fileID: 0}
+  _errorText: {fileID: 0}
 --- !u!4 &2116175769
 Transform:
   m_ObjectHideFlags: 0
@@ -15827,7 +15836,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &763894514249299100
 PrefabInstance:

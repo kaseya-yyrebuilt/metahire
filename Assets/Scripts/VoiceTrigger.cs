@@ -6,40 +6,29 @@ using UnityEngine;
 
 public class VoiceTrigger : MonoBehaviour
 {
-    [SerializeField]
-    private TextMeshProUGUI tipImage;
+    [SerializeField] private TextMeshProUGUI _tipImage;
+    [SerializeField] private TextMeshProUGUI _enterRoomImage;
+    [SerializeField] private Collider2D _voiceTriggerArea;
 
-    [SerializeField]
-    private TextMeshProUGUI enterRoomImage;
-
-    [SerializeField]
-    private Collider2D voiceTriggerArea;
-
-    private bool entered = false;
+    private bool _entered;
 
     private void Start()
     {
-        if (!voiceTriggerArea) voiceTriggerArea = GetComponent<Collider2D>();
-        tipImage.enabled = true;
-        enterRoomImage.enabled = false;
-    }
-
-    private void OnValidate()
-    {
-        if (!tipImage) Debug.LogWarning("Missing tip for triggering voice chat");
-        if (!enterRoomImage) Debug.LogWarning("Missing tip for chatting");
+        if (!_voiceTriggerArea) _voiceTriggerArea = GetComponent<Collider2D>();
+        _tipImage.enabled = true;
+        _enterRoomImage.enabled = false;
     }
 
     private void Update()
     {
-        if (entered && Input.GetKeyDown(KeyCode.E))
+        if (_entered && Input.GetKeyDown(KeyCode.E))
             ToggleDialog();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.GetPhotonView().IsMine)
-            entered = true;
+            _entered = true;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -47,25 +36,32 @@ public class VoiceTrigger : MonoBehaviour
         if (collision.gameObject.GetPhotonView().IsMine)
         {
             ToggleDialog(false);
-            entered = false;
+            _entered = false;
         }
     }
 
+    private void OnValidate()
+    {
+        if (!_tipImage) Debug.LogWarning("Missing tip for triggering voice chat");
+        if (!_enterRoomImage) Debug.LogWarning("Missing tip for chatting");
+    }
+
     /// <summary>
-    /// Toggle the status of microphone and speaker
+    ///     Toggle the status of microphone and speaker
     /// </summary>
     public void ToggleDialog(bool value)
     {
-        tipImage.enabled = value;
-        enterRoomImage.enabled = !value;
-        PhotonVoiceNetwork.Instance.PrimaryRecorder.TransmitEnabled = !value;
-        foreach (Speaker item in Component.FindObjectsOfType<Speaker>())
+        _tipImage.enabled = !value;
+        _enterRoomImage.enabled = value;
+        PhotonVoiceNetwork.Instance.PrimaryRecorder.TransmitEnabled = value;
+        foreach (var item in FindObjectsOfType<Speaker>())
         {
-            item.enabled = !value;
+            item.enabled = value;
         }
     }
+
     public void ToggleDialog()
     {
-        ToggleDialog(!tipImage.enabled);
+        ToggleDialog(!_enterRoomImage.enabled);
     }
 }

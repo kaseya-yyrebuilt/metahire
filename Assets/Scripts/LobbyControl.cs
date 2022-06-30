@@ -1,67 +1,69 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class LobbyControl : MonoBehaviourPunCallbacks
 {
-    private CanvasGroup thisCanvasGroup;
-    [SerializeField]
-    private Transform roomsListContentT;
-    [SerializeField]
-    private GameObject roomItemImageP;
-    private Dictionary<string, RoomItemControl> roomItemsDic = new Dictionary<string, RoomItemControl>();
-    [SerializeField]
-    private Button returnButton;
-    [SerializeField]
-    private EnterRoomControl enterRoomControl;
-    // Start is called before the first frame update
-    void Start()
-    {
-        thisCanvasGroup = this.gameObject.AddComponent<CanvasGroup>();
+    private readonly Dictionary<string, RoomItemControl> _roomItemsDic = new();
 
-        returnButton.onClick.AddListener(() =>
+    [SerializeField] private EnterRoomControl _enterRoomControl;
+    [SerializeField] private Button _backButton;
+    [SerializeField] private GameObject _roomItemImageP;
+    [SerializeField] private Transform _roomsListContentT;
+    [SerializeField] private Canvas _thisCanvas;
+
+    // Start is called before the first frame update
+    private void Start()
+    {
+        if (!_thisCanvas) _thisCanvas = GetComponent<Canvas>();
+
+        _backButton.onClick.AddListener(() =>
         {
             SetActive(false);
-            enterRoomControl.SetActive(true);
+            _enterRoomControl.SetActive(true);
         });
 
         SetActive(false);
     }
+
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         foreach (var item in roomList)
-        {
             if (item.RemovedFromList || item.PlayerCount == item.MaxPlayers || !item.IsOpen)
             {
-                if (roomItemsDic.ContainsKey(item.Name))
+                if (_roomItemsDic.ContainsKey(item.Name))
                 {
-                    Destroy(roomItemsDic[item.Name].gameObject);
-                    roomItemsDic.Remove(item.Name);
+                    Destroy(_roomItemsDic[item.Name].gameObject);
+                    _roomItemsDic.Remove(item.Name);
                 }
             }
             else
             {
-                if (roomItemsDic.ContainsKey(item.Name))
-                {
-                    roomItemsDic[item.Name].SetGamersCount(item.PlayerCount);
-                }
+                if (_roomItemsDic.ContainsKey(item.Name))
+                    _roomItemsDic[item.Name].SetGamersCount(item.PlayerCount);
+
                 else
                 {
-                    Transform roomItemT = Instantiate<GameObject>(roomItemImageP).transform;
-                    roomItemT.SetParent(roomsListContentT, false);
-                    RoomItemControl roomItemControl = roomItemT.GetComponent<RoomItemControl>();
+                    var roomItemT = Instantiate(_roomItemImageP).transform;
+                    roomItemT.SetParent(_roomsListContentT, false);
+                    var roomItemControl = roomItemT.GetComponent<RoomItemControl>();
                     roomItemControl.Init(item.Name, item.PlayerCount);
-                    roomItemsDic.Add(item.Name, roomItemControl);
+                    _roomItemsDic.Add(item.Name, roomItemControl);
                 }
             }
-        }
     }
+    private void OnValidate()
+    {
+        if (!_enterRoomControl) Debug.LogWarning($"{name}:{nameof(LobbyControl)}.{nameof(_enterRoomControl)} is not defined");
+        if (!_roomItemImageP) Debug.LogWarning($"{name}:{nameof(LobbyControl)}.{nameof(_roomItemImageP)} is not defined");
+        if (!_roomsListContentT) Debug.LogWarning($"{name}:{nameof(LobbyControl)}.{nameof(_roomsListContentT)} is not defined");
+        if (!_backButton) Debug.LogWarning($"{name}:{nameof(LobbyControl)}.{nameof(_backButton)} is not defined");
+    }
+
     public void SetActive(bool isActive)
     {
-        thisCanvasGroup.alpha = isActive ? 1f : 0f;
-        thisCanvasGroup.blocksRaycasts = isActive;
+        _thisCanvas.enabled = isActive;
     }
 }

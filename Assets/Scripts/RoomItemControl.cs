@@ -1,28 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
 
 public class RoomItemControl : MonoBehaviour
 {
-    [SerializeField]
-    private Text nameText;
-    [SerializeField]
-    private Text gamersCountText;
-    [SerializeField]
-    private Button joinButton;
+    [SerializeField] private int _capacity = 4;
+
+    [SerializeField] private TextMeshProUGUI _nameText;
+    [SerializeField] private TextMeshProUGUI _gamersCountText;
+    [SerializeField] private Button _joinButton;
+
+    public int Capacity => _capacity;
+
+    private void OnValidate()
+    {
+        if (!_nameText) Debug.LogWarning($"{name}:{nameof(RoomItemControl)}.{nameof(_nameText)} is not defined");
+        if (!_gamersCountText)
+            Debug.LogWarning($"{name}:{nameof(RoomItemControl)}.{nameof(_gamersCountText)} is not defined");
+        if (!_joinButton) Debug.LogWarning($"{name}:{nameof(RoomItemControl)}.{nameof(_joinButton)} is not defined");
+    }
+
     public void Init(string name, int gamersCount)
     {
-        nameText.text = name;
-        gamersCountText.text = $"{gamersCount} / 4";
-        joinButton.onClick.AddListener(() =>
-        {
-            PhotonNetwork.JoinRoom(name);
-        });
+        _nameText.text = name;
+        _gamersCountText.text = $"{gamersCount} / {_capacity}";
+        _joinButton.onClick.AddListener(() => { PhotonNetwork.JoinRoom(name); });
     }
+
     public void SetGamersCount(int gamersCount)
     {
-        gamersCountText.text = $"{gamersCount} / 4";
+        _gamersCountText.text = $"{gamersCount} / {Capacity}";
     }
 }

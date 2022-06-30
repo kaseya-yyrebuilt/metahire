@@ -1,4 +1,4 @@
-using ExitGames.Client.Photon;
+﻿using ExitGames.Client.Photon;
 using Photon.Chat;
 using Photon.Pun;
 using System;
@@ -8,57 +8,44 @@ using UnityEngine.UI;
 
 public class ChatControl : MonoBehaviour, IChatClientListener
 {
-    private ChatClient chatClient;
-    private string channelName;
-    [SerializeField]
-    private CanvasGroup thisCanvasGroup;
-    [SerializeField]
-    private ScrollRect messageScrollRect;
-    [SerializeField]
-    private Transform contentT;
-    [SerializeField]
-    private GameObject messageTextP;
-    [SerializeField]
-    private TMP_InputField messageInputField;
-    [SerializeField]
-    private TextMeshProUGUI PingText;
+    private string _channelName;
+    private ChatClient _chatClient;
 
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Transform _contentT;
+    [SerializeField] private TMP_InputField _messageInputField;
+    [SerializeField] private ScrollRect _messageScrollRect;
+    [SerializeField] private GameObject _messageTextP;
+    [SerializeField] private TextMeshProUGUI _pingText;
+    [SerializeField] private Canvas _thisCanvas;
+
+    private void Start()
     {
-        thisCanvasGroup.alpha = 0f;
-        thisCanvasGroup.blocksRaycasts = false;
+        if (!_thisCanvas) _thisCanvas = GetComponent<Canvas>();
+        _thisCanvas.enabled = false;
 
-        messageInputField.onEndEdit.AddListener(message =>
+        _messageInputField.onSubmit.AddListener(message =>
         {
             if (!string.IsNullOrEmpty(message))
             {
-                chatClient.PublishMessage(channelName, message);
-                messageInputField.text = string.Empty;
+                _chatClient.PublishMessage(_channelName, message);
+                _messageInputField.text = string.Empty;
             }
         });
 
-        chatClient = new ChatClient(this);
-        Photon.Realtime.AppSettings appSettings = PhotonNetwork.PhotonServerSettings.AppSettings;
-        chatClient.ChatRegion = "asia";
-        chatClient.Connect(appSettings.AppIdChat, appSettings.AppVersion, new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
-        channelName = PhotonNetwork.CloudRegion + PhotonNetwork.CurrentRoom.Name;
-        messageInputField.onSelect.AddListener(_ => PlayerController.playerControlsEnabled = false);
-        messageInputField.onDeselect.AddListener(_ => PlayerController.playerControlsEnabled = true);
+        _chatClient = new ChatClient(this);
+        var appSettings = PhotonNetwork.PhotonServerSettings.AppSettings;
+        _chatClient.ChatRegion = "asia";
+        _chatClient.Connect(appSettings.AppIdChat, appSettings.AppVersion,
+            new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
+        _channelName = PhotonNetwork.CloudRegion + PhotonNetwork.CurrentRoom.Name;
+        _messageInputField.onSelect.AddListener(_ => PlayerController.PlayerControlsEnabled = false);
+        _messageInputField.onDeselect.AddListener(_ => PlayerController.PlayerControlsEnabled = true);
     }
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
-        chatClient?.Service();
-        if (PingText) PingText.text = $"Ping: {PhotonNetwork.GetPing()}";
-    }
-    private void CreateMessage(string sender, string message)
-    {
-        TextMeshProUGUI messageText = Instantiate(messageTextP).GetComponent<TextMeshProUGUI>();
-        messageText.text = $"{DateTime.Now.ToString("[hh:mm:ss]")}<color={(sender == PhotonNetwork.LocalPlayer.NickName ? "red" : "green")}>{sender}:</color>{message}";
-        messageText.transform.SetParent(contentT, false);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(messageScrollRect.GetComponent<RectTransform>());
-        messageScrollRect.verticalNormalizedPosition = 0f;
+        _chatClient?.Service(); // Must be called regularly to keep connection between client and server alive
+        if (_pingText) _pingText.text = $"Ping: {PhotonNetwork.GetPing()}";
     }
 
     public void DebugReturn(DebugLevel level, string message)
@@ -78,50 +65,60 @@ public class ChatControl : MonoBehaviour, IChatClientListener
                 break;
         }
     }
+
     public void OnDisconnected()
     {
         Debug.Log("OnDisconnected");
     }
+
     public void OnConnected()
     {
-        thisCanvasGroup.alpha = 1f;
-        thisCanvasGroup.blocksRaycasts = true;
-        chatClient.Subscribe(channelName);
+        _thisCanvas.enabled = true;
+        _chatClient.Subscribe(_channelName);
         Debug.Log("OnConnected");
     }
+
     public void OnChatStateChange(ChatState state)
     {
-
     }
+
     public void OnGetMessages(string channelName, string[] senders, object[] messages)
     {
-        for (int i = 0; i < senders.Length; i++)
-        {
+        for (var i = 0; i < senders.Length; i++)
             CreateMessage(senders[i], messages[i].ToString());
-        }
     }
+
     public void OnPrivateMessage(string sender, object message, string channelName)
     {
-
     }
+
     public void OnSubscribed(string[] channels, bool[] results)
     {
-
     }
+
     public void OnUnsubscribed(string[] channels)
     {
-
     }
+
     public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
     {
-
     }
+
     public void OnUserSubscribed(string channel, string user)
     {
-
     }
+
     public void OnUserUnsubscribed(string channel, string user)
     {
+    }
 
+    private void CreateMessage(string sender, string message)
+    {
+        var messageText = Instantiate(_messageTextP).GetComponent<TextMeshProUGUI>();
+        messageText.text =
+            $"{DateTime.Now.ToString("[hh:mm:ss]")}<color={(sender == PhotonNetwork.LocalPlayer.NickName ? "red" : "green")}>{sender}:</color>{message}";
+        messageText.transform.SetParent(_contentT, false);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_messageScrollRect.GetComponent<RectTransform>());
+        _messageScrollRect.verticalNormalizedPosition = 0f;
     }
 }

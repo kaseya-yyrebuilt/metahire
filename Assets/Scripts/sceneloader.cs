@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class sceneloader : MonoBehaviour
 {
-
-    void Update()
+    private void Update()
     {
         // Create a temporary reference to the current scene.
         //Scene currentScene = SceneManager.GetActiveScene();
@@ -16,11 +13,7 @@ public class sceneloader : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            SceneManager.LoadScene("mainlogin");
-        }
-        else
-        {
-
+            SceneManager.LoadSceneAsync("mainlogin");
         }
     }
 }

@@ -1,11 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
+using UnityEngine;
 
 public class UIManager : MonoBehaviourPunCallbacks
 {
-    public LoginControl loginControl;
+    [SerializeField] private LoginControl _loginControl;
+
+    private void OnValidate()
+    {
+        if (!_loginControl) Debug.LogWarning($"{name}:{nameof(UIManager)}.{nameof(_loginControl)} is not defined");
+    }
+
     private void Start()
     {
         if (!PhotonNetwork.IsConnected)
@@ -13,12 +17,14 @@ public class UIManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();
         }
     }
+
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinLobby();
     }
+
     public override void OnJoinedLobby()
     {
-        loginControl.SetActive(true);
+        _loginControl.SetActive(true);
     }
 }

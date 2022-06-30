@@ -1,51 +1,51 @@
-﻿using Photon.Pun;
-using System.Linq;
+﻿using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
+    [SerializeField] private Canvas _canvas;
+    [SerializeField] private ToggleGroup _toggle;
+    [SerializeField] private Canvas _nextCanvas;
 
-    [SerializeField]
-    private Canvas Canvas;
+    private string _character;
 
-    [SerializeField]
-    private ToggleGroup toggle;
-
-    [SerializeField]
-    private Canvas NextCanvas;
-
-    private string character;
+    private void Start()
+    {
+        if (!_canvas) _canvas = GetComponent<Canvas>();
+        _canvas.enabled = true;
+    }
 
     private void getCharacter()
     {
-        if (!toggle || !toggle.AnyTogglesOn())
+        if (!_toggle || !_toggle.AnyTogglesOn())
         {
             Debug.LogWarning("Toggle is not available");
             return;
         }
-        
-        Toggle[] t = toggle.ActiveToggles().Cast<Toggle>().ToArray();
+
+        var t = _toggle.ActiveToggles().ToArray();
         if (t.Length != 1)
         {
-            Debug.LogWarning("More than 1 character selected");
+            Debug.LogWarning("More than 1 _character selected");
         }
         else
         {
-            string cname = t[0].gameObject.name;
-            if (cname.Contains("Ruby")) character = "Ruby";
-            else if (cname.Contains("MrClock")) character = "Robot";
+            var cname = t[0].gameObject.name;
+            if (cname.Contains("Ruby")) _character = "Ruby";
+            else if (cname.Contains("MrClock")) _character = "Robot";
         }
     }
 
     public void ReadyToPlay()
     {
-        Canvas.enabled = false;
+        _canvas.enabled = false;
         getCharacter();
-        if (string.IsNullOrEmpty(character)) character = "Ruby";
-        NextCanvas.enabled = true;
-        GameObject respawn = GameObject.FindGameObjectWithTag("Respawn");
-        Vector3 respawnPos = respawn? respawn.transform.position + new Vector3(0,-1f,0) : new Vector3(1, 1, 0);
-        PhotonNetwork.Instantiate(character, respawnPos, Quaternion.identity, 0);
+        if (string.IsNullOrEmpty(_character)) _character = "Ruby";
+        _nextCanvas.enabled = true;
+        var respawn = GameObject.FindGameObjectWithTag("Respawn");
+        var respawnPos = respawn ? respawn.transform.position + new Vector3(0, -1f, 0) : new Vector3(1, 1, 0);
+        PhotonNetwork.Instantiate(_character, respawnPos, Quaternion.identity);
     }
 }

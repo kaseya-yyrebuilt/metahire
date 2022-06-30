@@ -1,77 +1,79 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class EnterRoomControl : MonoBehaviourPunCallbacks
 {
-    private CanvasGroup thisCanvasGroup;
-    [SerializeField]
-    private InputField roomNameInputField;
-    [SerializeField]
-    private Button joinButton;
-    [SerializeField]
-    private Button lobbyButton;
-    [SerializeField]
-    private Button backButton;
-    [SerializeField]
-    private Text errorText;
-    [SerializeField]
-    private LoginControl loginControl;
-    [SerializeField]
-    private LobbyControl lobbyControl;
+    [SerializeField] private LobbyControl _lobbyControl;
+    [SerializeField] private LoginControl _loginControl;
+    [SerializeField] private TMP_InputField _roomNameInputField;
+    [SerializeField] private Button _joinButton;
+    [SerializeField] private Button _lobbyButton;
+    [SerializeField] private Button _backButton;
+    [SerializeField] private TextMeshProUGUI _errorText;
+
+    [SerializeField] private Canvas _thisCanvas;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        thisCanvasGroup = this.gameObject.AddComponent<CanvasGroup>();
+        if (!_thisCanvas) _thisCanvas = GetComponent<Canvas>();
+        _roomNameInputField.onValueChanged.AddListener(input => { _errorText.text = string.Empty; });
 
-        roomNameInputField.onValueChanged.AddListener(input =>
+        _joinButton.onClick.AddListener(() =>
         {
-            errorText.text = string.Empty;
-        });
-
-        joinButton.onClick.AddListener(() =>
-        {
-            if (roomNameInputField.text == string.Empty)
+            if (_roomNameInputField.text == string.Empty)
             {
-                errorText.text = "The room name cannot be empty!";
+                _errorText.text = "The room name cannot be empty!";
                 return;
             }
 
-            RoomOptions options = new RoomOptions { MaxPlayers = 10 };
-            PhotonNetwork.JoinOrCreateRoom(roomNameInputField.text, options, TypedLobby.Default);
+            var options = new RoomOptions {MaxPlayers = 10};
+            PhotonNetwork.JoinOrCreateRoom(_roomNameInputField.text, options, TypedLobby.Default);
         });
 
-        lobbyButton.onClick.AddListener(() =>
+        _lobbyButton.onClick.AddListener(() =>
         {
             SetActive(false);
-            errorText.text = string.Empty;
-            lobbyControl.SetActive(true);
+            _errorText.text = string.Empty;
+            _lobbyControl.SetActive(true);
         });
 
-        backButton.onClick.AddListener(() =>
+        _backButton.onClick.AddListener(() =>
         {
             SetActive(false);
-            errorText.text = string.Empty;
-            loginControl.SetActive(true);
+            _errorText.text = string.Empty;
+            _loginControl.SetActive(true);
         });
 
         SetActive(false);
     }
+
+    private void OnValidate()
+    {
+        if (!_lobbyControl) Debug.LogWarning($"{name}:{nameof(EnterRoomControl)}.{nameof(_lobbyControl)} is not defined");
+        if (!_loginControl) Debug.LogWarning($"{name}:{nameof(EnterRoomControl)}.{nameof(_loginControl)} is not defined");
+        if (!_roomNameInputField) Debug.LogWarning($"{name}:{nameof(EnterRoomControl)}.{nameof(_roomNameInputField)} is not defined");
+        if (!_joinButton) Debug.LogWarning($"{name}:{nameof(EnterRoomControl)}.{nameof(_joinButton)} is not defined");
+        if (!_lobbyButton) Debug.LogWarning($"{name}:{nameof(EnterRoomControl)}.{nameof(_lobbyButton)} is not defined");
+        if (!_backButton) Debug.LogWarning($"{name}:{nameof(EnterRoomControl)}.{nameof(_backButton)} is not defined");
+    }
+
     public override void OnJoinedRoom()
     {
-        SceneManager.LoadScene("Scene01", LoadSceneMode.Single);
+        PhotonNetwork.LoadLevel("Scene01");
     }
+
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        errorText.text = message;
+        _errorText.text = message;
     }
+
     public void SetActive(bool isActive)
     {
-        thisCanvasGroup.alpha = isActive ? 1f : 0f;
-        thisCanvasGroup.blocksRaycasts = isActive;
+        _thisCanvas.enabled = isActive;
     }
 }

@@ -1,104 +1,103 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+using Photon.Pun;
 using PlayFab;
 using PlayFab.ClientModels;
-using Photon.Pun;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class LoginControl : MonoBehaviour
 {
-    private CanvasGroup thisCanvasGroup;
-    [SerializeField]
-    private InputField emailInputField;
-    [SerializeField]
-    private InputField passwordInputField;
-    [SerializeField]
-    private Button loginButton;
-    [SerializeField]
-    private Button registerButton;
-    [SerializeField]
-    private Text errorText;
-    [SerializeField]
-    private RegisterControl registerControl;
-    [SerializeField]
-    private EnterRoomControl enterRoomControl;
+    [SerializeField] private EnterRoomControl _enterRoomControl;
+    [SerializeField] private RegisterControl _registerControl;
+    [SerializeField] private TMP_InputField _emailInputField;
+    [SerializeField] private TMP_InputField _passwordInputField;
+    [SerializeField] private Button _loginButton;
+    [SerializeField] private Button _registerButton;
+    [SerializeField] private TextMeshProUGUI _errorText;
+    [SerializeField] private Canvas _thisCanvas;
+
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        thisCanvasGroup = this.gameObject.AddComponent<CanvasGroup>();
+        if (!_thisCanvas) _thisCanvas = GetComponent<Canvas>();
 
-        emailInputField.onValueChanged.AddListener(input =>
-        {
-            errorText.text = string.Empty;
-        });
+        _emailInputField.onValueChanged.AddListener(input => { _errorText.text = string.Empty; });
 
-        passwordInputField.onValueChanged.AddListener(input =>
-        {
-            errorText.text = string.Empty;
-        });
+        _passwordInputField.onValueChanged.AddListener(input => { _errorText.text = string.Empty; });
 
-        loginButton.onClick.AddListener(() =>
+        _loginButton.onClick.AddListener(() =>
         {
-            if (emailInputField.text == string.Empty)
+            if (_emailInputField.text == string.Empty)
             {
-                errorText.text = "The email cannot be empty!";
-                return;
-            }
-            else if (passwordInputField.text == string.Empty)
-            {
-                errorText.text = "The password cannot be empty!";
+                _errorText.text = "The email cannot be empty!";
                 return;
             }
 
-            LoginWithEmailAddressRequest loginRequest = new LoginWithEmailAddressRequest()
+            if (_passwordInputField.text == string.Empty)
             {
-                Email = emailInputField.text,
-                Password = passwordInputField.text
+                _errorText.text = "The password cannot be empty!";
+                return;
+            }
+
+            var loginRequest = new LoginWithEmailAddressRequest
+            {
+                Email = _emailInputField.text,
+                Password = _passwordInputField.text
             };
             PlayFabClientAPI.LoginWithEmailAddress(loginRequest,
-            loginResult =>
-            {
-                GetAccountInfoRequest getAccountInfoRequest = new GetAccountInfoRequest()
+                loginResult =>
                 {
-                    PlayFabId = loginResult.PlayFabId
-                };
-                PlayFabClientAPI.GetAccountInfo(getAccountInfoRequest,
-                getAccountInfoResult =>
-                {
-                    PhotonNetwork.NickName = getAccountInfoResult.AccountInfo.Username;
-                    errorText.text = string.Empty;
-                    SetActive(false);
-                    enterRoomControl.SetActive(true);
-                    Debug.Log(getAccountInfoResult.AccountInfo.Username);
+                    var getAccountInfoRequest = new GetAccountInfoRequest
+                    {
+                        PlayFabId = loginResult.PlayFabId
+                    };
+                    PlayFabClientAPI.GetAccountInfo(getAccountInfoRequest,
+                        getAccountInfoResult =>
+                        {
+                            PhotonNetwork.NickName = getAccountInfoResult.AccountInfo.Username;
+                            _errorText.text = string.Empty;
+                            SetActive(false);
+                            _enterRoomControl.SetActive(true);
+                            Debug.Log(getAccountInfoResult.AccountInfo.Username);
+                        },
+                        getAccountInfoError =>
+                        {
+                            _errorText.text = getAccountInfoError.ErrorMessage;
+                            Debug.LogError(getAccountInfoError.ErrorMessage);
+                        });
                 },
-                getAccountInfoError =>
+                loginError =>
                 {
-                    errorText.text = getAccountInfoError.ErrorMessage;
-                    Debug.LogError(getAccountInfoError.ErrorMessage);
+                    _errorText.text = loginError.ErrorMessage;
+                    Debug.LogError(loginError.ErrorMessage);
                 });
-            },
-            loginError =>
-            {
-                errorText.text = loginError.ErrorMessage;
-                Debug.LogError(loginError.ErrorMessage);
-            });
         });
 
-        registerButton.onClick.AddListener(() =>
+        _registerButton.onClick.AddListener(() =>
         {
-            errorText.text = string.Empty;
+            _errorText.text = string.Empty;
             SetActive(false);
-            registerControl.SetActive(true);
+            _registerControl.SetActive(true);
         });
 
         PlayFabSettings.TitleId = "9B23C";
 
         SetActive(false);
     }
+
+    private void OnValidate()
+    {
+        if (!_enterRoomControl) Debug.LogWarning($"{name}:{nameof(PlayerController)}.{nameof(_enterRoomControl)} is not defined");
+        if (!_registerControl) Debug.LogWarning($"{name}:{nameof(PlayerController)}.{nameof(_registerControl)} is not defined");
+        if (!_emailInputField) Debug.LogWarning($"{name}:{nameof(PlayerController)}.{nameof(_emailInputField)} is not defined");
+        if (!_passwordInputField) Debug.LogWarning($"{name}:{nameof(PlayerController)}.{nameof(_passwordInputField)} is not defined");
+        if (!_loginButton) Debug.LogWarning($"{name}:{nameof(PlayerController)}.{nameof(_loginButton)} is not defined");
+        if (!_registerButton) Debug.LogWarning($"{name}:{nameof(PlayerController)}.{nameof(_registerButton)} is not defined");
+        if (!_errorText) Debug.LogWarning($"{name}:{nameof(PlayerController)}.{nameof(_errorText)} is not defined");
+    }
+
     public void SetActive(bool isActive)
     {
-        thisCanvasGroup.alpha = isActive ? 1f : 0f;
-        thisCanvasGroup.blocksRaycasts = isActive;
+        _thisCanvas.enabled = isActive;
     }
 }

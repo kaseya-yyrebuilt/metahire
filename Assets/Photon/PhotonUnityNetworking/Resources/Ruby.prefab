@@ -402,13 +402,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a46e67e3bd7a7c44bb273f46f84e53b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  walkAudio: {fileID: 7681628462387438813}
-  nameTag: {fileID: 7387991074336194530}
-  PlayerCamera: {fileID: 7926553026727425522}
-  state: 0
-  rbody: {fileID: 3972903155324676255}
-  anim: {fileID: 3972903155324676248}
+  _speed: 5
+  _anim: {fileID: 3972903155324676248}
+  _rbody: {fileID: 3972903155324676255}
+  _playerCamera: {fileID: 6361433723488680346}
+  _nameTag: {fileID: 7387991074336194530}
+  _walkAudio: {fileID: 7681628462387438813}
 --- !u!50 &3972903155324676255
 Rigidbody2D:
   serializedVersion: 4
@@ -770,7 +769,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2631288491812548259}
   - component: {fileID: 6361433723488680346}
-  - component: {fileID: 7173451363395582118}
   m_Layer: 0
   m_Name: PlayerCamera
   m_TagString: Untagged
@@ -836,11 +834,3 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &7173451363395582118
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7926553026727425522}
-  m_Enabled: 1
