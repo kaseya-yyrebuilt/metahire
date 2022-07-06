@@ -64,8 +64,8 @@ public class PlayerController : MonoBehaviourPun
             {
                 lookDirection = moveVector;
             }
-            anim.SetFloat("Look X", lookDirection.x);
-            anim.SetFloat("Look Y", lookDirection.y);
+            //anim.SetFloat("Look X", lookDirection.x);
+            //anim.SetFloat("Look Y", lookDirection.y);
             anim.SetFloat("Speed", moveVector.magnitude);
 
 
