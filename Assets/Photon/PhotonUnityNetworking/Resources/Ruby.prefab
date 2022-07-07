@@ -495,6 +495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  rotationSpeed: 5
   RubyWalk: {fileID: 8771236970835503758, guid: 78db7b1e41ebcf245b09ec52049b4643,
     type: 3}
   nameText: {fileID: 2077366264}

@@ -60,12 +60,13 @@ public class PlayerController : MonoBehaviourPun
             float moveY = Input.GetAxisRaw("Vertical");
 
             Vector2 moveVector = new Vector2(moveX, moveY);
+
             if (moveVector.x != 0 || moveVector.y != 0)
             {
                 lookDirection = moveVector;
             }
-            //anim.SetFloat("Look X", lookDirection.x);
-            //anim.SetFloat("Look Y", lookDirection.y);
+            anim.SetFloat("Look_X", lookDirection.x);
+            anim.SetFloat("Look_Y", lookDirection.y);
             anim.SetFloat("Speed", moveVector.magnitude);
 
 
