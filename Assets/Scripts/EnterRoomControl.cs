@@ -2,11 +2,13 @@ using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class EnterRoomControl : MonoBehaviourPunCallbacks
 {
+    [Header("Room Info")]
+    [SerializeField] private int _roomCapacity = 4;
+    [Header("Controllers")]
     [SerializeField] private LobbyControl _lobbyControl;
     [SerializeField] private LoginControl _loginControl;
     [SerializeField] private TMP_InputField _roomNameInputField;
@@ -31,7 +33,7 @@ public class EnterRoomControl : MonoBehaviourPunCallbacks
                 return;
             }
 
-            var options = new RoomOptions {MaxPlayers = 10};
+            var options = new RoomOptions {MaxPlayers = System.Convert.ToByte(_roomCapacity)};
             PhotonNetwork.JoinOrCreateRoom(_roomNameInputField.text, options, TypedLobby.Default);
         });
 
@@ -60,11 +62,6 @@ public class EnterRoomControl : MonoBehaviourPunCallbacks
         if (!_joinButton) Debug.LogWarning($"{name}:{nameof(EnterRoomControl)}.{nameof(_joinButton)} is not defined");
         if (!_lobbyButton) Debug.LogWarning($"{name}:{nameof(EnterRoomControl)}.{nameof(_lobbyButton)} is not defined");
         if (!_backButton) Debug.LogWarning($"{name}:{nameof(EnterRoomControl)}.{nameof(_backButton)} is not defined");
-    }
-
-    public override void OnJoinedRoom()
-    {
-        PhotonNetwork.LoadLevel("Scene01");
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)

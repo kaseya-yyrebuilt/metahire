@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +14,8 @@ public class sceneloader : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            SceneManager.LoadSceneAsync("mainlogin");
+            PhotonNetwork.LoadLevel("Scene01");
+            SceneManager.LoadSceneAsync("mainlogin", LoadSceneMode.Additive);
         }
     }
 }

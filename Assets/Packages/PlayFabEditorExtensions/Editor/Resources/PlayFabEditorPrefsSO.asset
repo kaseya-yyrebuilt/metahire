@@ -15,7 +15,7 @@ MonoBehaviour:
   DevAccountEmail: Metahire2022@gmail.com
   DevAccountToken: ff463gkwqiwkuopghi8p6ff3oxbzsir57jwcu4qyh8jer679bz1e8ex4rnn75imqx3o7jo61a8ctsa7pyx5eix9ph9bkcyj6z6m31rnswj6tkd7w39p9qoydp8uzchf6u7hn7qzjfsbq4xy5b34rkdthnqhnzpxo3mihicfcejwc648q7d6h6t8b8ctu58o48jwxm4e1
   SelectedStudio: My Game Studio
-  SdkPath: Assets/PlayFabSDK
+  SdkPath: Assets/Packages/PlayFabSDK
   EdExPath: 
   LocalCloudScriptPath: 
   PanelIsShown: 0

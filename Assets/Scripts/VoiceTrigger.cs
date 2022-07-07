@@ -10,7 +10,7 @@ public class VoiceTrigger : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _enterRoomImage;
     [SerializeField] private Collider2D _voiceTriggerArea;
 
-    private bool _entered;
+    private bool _entered = false;
 
     private void Start()
     {
@@ -53,11 +53,11 @@ public class VoiceTrigger : MonoBehaviour
     {
         _tipImage.enabled = !value;
         _enterRoomImage.enabled = value;
-        PhotonVoiceNetwork.Instance.PrimaryRecorder.TransmitEnabled = value;
-        foreach (var item in FindObjectsOfType<Speaker>())
-        {
-            item.enabled = value;
-        }
+        //PhotonVoiceNetwork.Instance.PrimaryRecorder.TransmitEnabled = value;
+        //foreach (var item in FindObjectsOfType<Speaker>())
+        //{
+        //    item.enabled = value;
+        //}
     }
 
     public void ToggleDialog()

@@ -58,7 +58,7 @@ public class LoginControl : MonoBehaviour
                             _errorText.text = string.Empty;
                             SetActive(false);
                             _enterRoomControl.SetActive(true);
-                            Debug.Log(getAccountInfoResult.AccountInfo.Username);
+                            Debug.Log($"Logged in as {getAccountInfoResult.AccountInfo.Username}");
                         },
                         getAccountInfoError =>
                         {

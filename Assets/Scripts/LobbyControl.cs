@@ -49,7 +49,7 @@ public class LobbyControl : MonoBehaviourPunCallbacks
                     var roomItemT = Instantiate(_roomItemImageP).transform;
                     roomItemT.SetParent(_roomsListContentT, false);
                     var roomItemControl = roomItemT.GetComponent<RoomItemControl>();
-                    roomItemControl.Init(item.Name, item.PlayerCount);
+                    roomItemControl.Init(item.Name, item.PlayerCount, item.MaxPlayers);
                     _roomItemsDic.Add(item.Name, roomItemControl);
                 }
             }

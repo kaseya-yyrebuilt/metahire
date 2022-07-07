@@ -21,7 +21,6 @@ public class ChatControl : MonoBehaviour, IChatClientListener
     private void Start()
     {
         if (!_thisCanvas) _thisCanvas = GetComponent<Canvas>();
-        _thisCanvas.enabled = false;
 
         _messageInputField.onSubmit.AddListener(message =>
         {
@@ -32,14 +31,20 @@ public class ChatControl : MonoBehaviour, IChatClientListener
             }
         });
 
-        _chatClient = new ChatClient(this);
-        var appSettings = PhotonNetwork.PhotonServerSettings.AppSettings;
-        _chatClient.ChatRegion = "asia";
-        _chatClient.Connect(appSettings.AppIdChat, appSettings.AppVersion,
-            new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
-        _channelName = PhotonNetwork.CloudRegion + PhotonNetwork.CurrentRoom.Name;
         _messageInputField.onSelect.AddListener(_ => PlayerController.PlayerControlsEnabled = false);
         _messageInputField.onDeselect.AddListener(_ => PlayerController.PlayerControlsEnabled = true);
+    }
+
+    public void OnEnable()
+    {
+        _chatClient = new ChatClient(this);
+        var appSettings = PhotonNetwork.PhotonServerSettings.AppSettings;
+        //_chatClient.ChatRegion = "us";
+        _chatClient.Connect(appSettings.AppIdChat, appSettings.AppVersion,
+            new AuthenticationValues(PhotonNetwork.LocalPlayer.NickName));
+        _channelName = PhotonNetwork.CloudRegion ?? "" + PhotonNetwork.CurrentRoom.Name;
+
+        _thisCanvas.enabled = true;
     }
 
     private void Update()
@@ -68,7 +73,7 @@ public class ChatControl : MonoBehaviour, IChatClientListener
 
     public void OnDisconnected()
     {
-        Debug.Log("OnDisconnected");
+        Debug.Log("Chat OnDisconnected");
     }
 
     public void OnConnected()
@@ -120,5 +125,18 @@ public class ChatControl : MonoBehaviour, IChatClientListener
         messageText.transform.SetParent(_contentT, false);
         LayoutRebuilder.ForceRebuildLayoutImmediate(_messageScrollRect.GetComponent<RectTransform>());
         _messageScrollRect.verticalNormalizedPosition = 0f;
+    }
+
+    private void DestroyAllMessages()
+    {
+        // Deconstruction happens at the end of the frame
+        for (int i = _contentT.childCount-1; i >= 0 ; i--)
+            Destroy(_contentT.GetChild(i).gameObject);
+    }
+
+    public void LeaveRoom()
+    {
+        DestroyAllMessages();
+        PhotonNetwork.LeaveRoom();
     }
 }

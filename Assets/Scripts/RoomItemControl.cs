@@ -5,13 +5,11 @@ using UnityEngine.UI;
 
 public class RoomItemControl : MonoBehaviour
 {
-    [SerializeField] private int _capacity = 4;
-
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _gamersCountText;
     [SerializeField] private Button _joinButton;
 
-    public int Capacity => _capacity;
+    private int _capacity;
 
     private void OnValidate()
     {
@@ -21,15 +19,14 @@ public class RoomItemControl : MonoBehaviour
         if (!_joinButton) Debug.LogWarning($"{name}:{nameof(RoomItemControl)}.{nameof(_joinButton)} is not defined");
     }
 
-    public void Init(string name, int gamersCount)
+    public void Init(string name, int gamersCount, int capacity)
     {
         _nameText.text = name;
         _gamersCountText.text = $"{gamersCount} / {_capacity}";
         _joinButton.onClick.AddListener(() => { PhotonNetwork.JoinRoom(name); });
+
+        _capacity = capacity;
     }
 
-    public void SetGamersCount(int gamersCount)
-    {
-        _gamersCountText.text = $"{gamersCount} / {Capacity}";
-    }
+    public void SetGamersCount(int gamersCount) => _gamersCountText.text = $"{gamersCount} / {_capacity}";
 }
