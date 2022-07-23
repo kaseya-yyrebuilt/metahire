@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         _canvas.enabled = true;
     }
 
-    public override void OnJoinedLobby()
+    public override void OnConnectedToMaster()
     {
         _chatControl.enabled = false;
         _inGameDisplay.enabled = false;

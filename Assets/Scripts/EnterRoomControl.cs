@@ -39,6 +39,7 @@ public class EnterRoomControl : MonoBehaviourPunCallbacks
 
         _lobbyButton.onClick.AddListener(() =>
         {
+            if (!PhotonNetwork.InLobby) PhotonNetwork.JoinLobby();
             SetActive(false);
             _errorText.text = string.Empty;
             _lobbyControl.SetActive(true);

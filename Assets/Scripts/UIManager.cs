@@ -24,11 +24,6 @@ public class UIManager : MonoBehaviourPunCallbacks
         }
     }
 
-    public override void OnConnectedToMaster()
-    {
-        PhotonNetwork.JoinLobby();
-    }
-
     public override void OnJoinedRoom()
     {
         //PhotonNetwork.LoadLevel("Scene01");
@@ -37,7 +32,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         _UIBackgroundVFX.gameObject.SetActive(false);
     }
 
-    public override void OnJoinedLobby()
+    public override void OnConnectedToMaster()
     {
         if (_firstLogin)
         {
