@@ -1,11 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
+using UnityEngine;
+using UnityEngine.Rendering;
 
 public class UIManager : MonoBehaviourPunCallbacks
 {
-    public LoginControl loginControl;
+    [SerializeField] private LoginControl _loginControl;
+    [SerializeField] private EnterRoomControl _enterRoomControl;
+    [SerializeField] private LobbyControl _lobbyControl;
+    [SerializeField] private Volume _UIBackgroundVFX;
+
+    private bool _firstLogin = true;
+
+    private void OnValidate()
+    {
+        if (!_loginControl) Debug.LogWarning($"{name}:{nameof(UIManager)}.{nameof(_loginControl)} is not defined");
+    }
+
     private void Start()
     {
         if (!PhotonNetwork.IsConnected)
@@ -13,12 +23,24 @@ public class UIManager : MonoBehaviourPunCallbacks
             PhotonNetwork.ConnectUsingSettings();
         }
     }
+
+    public override void OnJoinedRoom()
+    {
+        //PhotonNetwork.LoadLevel("Scene01");
+        _enterRoomControl.SetActive(false);
+        _lobbyControl.SetActive(false);
+        _UIBackgroundVFX.gameObject.SetActive(false);
+    }
+
     public override void OnConnectedToMaster()
     {
-        PhotonNetwork.JoinLobby();
-    }
-    public override void OnJoinedLobby()
-    {
-        loginControl.SetActive(true);
+        if (_firstLogin)
+        {
+            _loginControl.SetActive(true);
+            _firstLogin = false;
+        }
+        else
+            _enterRoomControl.SetActive(true);
+        _UIBackgroundVFX.gameObject.SetActive(true);
     }
 }

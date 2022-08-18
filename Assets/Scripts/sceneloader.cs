@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class sceneloader : MonoBehaviour
 {
-    [System.Obsolete]
-    void Update()
+    private void Update()
     {
         // Create a temporary reference to the current scene.
         //Scene currentScene = SceneManager.GetActiveScene();
@@ -16,11 +14,8 @@ public class sceneloader : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.F))
         {
-            Application.LoadLevel("mainlogin");
-        }
-        else
-        {
-
+            PhotonNetwork.LoadLevel("Scene01");
+            SceneManager.LoadSceneAsync("mainlogin", LoadSceneMode.Additive);
         }
     }
 }

@@ -1,5 +1,19 @@
 .vsconfig
+.idea
 
+/ProjectSettings/Packages/com.unity.connect.share/
+
+# Mac gitignore
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
 
 # This .gitignore file should be placed at the root of your Unity project directory
 #

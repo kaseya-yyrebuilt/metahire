@@ -1,48 +1,64 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Linq;
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
-using Photon.Pun;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
-    public GameObject readyButton;
-    public GameObject RubyButton;
-    public GameObject RobotButton;
-    public GameObject Canvas;
-    private string character = "Ruby";
-    public GameObject RubyFrame;
-    public GameObject RobotFrame;
-    public Text PingText;
+    [SerializeField] private Canvas _canvas;
+    [SerializeField] private ToggleGroup _toggle;
+    [SerializeField] private Canvas _inGameDisplay;
+    [SerializeField] private ChatControl _chatControl;
+
+    private string _character;
 
     private void Start()
     {
-        RubyFrame.SetActive(true);
-        RobotFrame.SetActive(false);
+        if (!_canvas) _canvas = GetComponent<Canvas>();
+        //_canvas.enabled = true;
     }
 
-    private void Update()
+    private void getCharacter()
     {
-        PingText.text = "Ping: " + PhotonNetwork.GetPing();
-    }
+        if (!_toggle || !_toggle.AnyTogglesOn())
+        {
+            Debug.LogWarning("Toggle is not available");
+            return;
+        }
 
-    public void ChooseRuby()
-    {
-        character = "Ruby";
-        RubyFrame.SetActive(true);
-        RobotFrame.SetActive(false);
-    }
-
-    public void ChooseRobot()
-    {
-        character = "Robot";
-        RubyFrame.SetActive(false);
-        RobotFrame.SetActive(true);
+        var t = _toggle.ActiveToggles().ToArray();
+        if (t.Length != 1)
+        {
+            Debug.LogWarning("More than 1 _character selected");
+        }
+        else
+        {
+            var cname = t[0].gameObject.name;
+            if (cname.Contains("Ruby")) _character = "Ruby";
+            else if (cname.Contains("MrClock")) _character = "Robot";
+        }
     }
 
     public void ReadyToPlay()
     {
-        Canvas.SetActive(false);
-        PhotonNetwork.Instantiate(character, new Vector3(1, 1, 0), Quaternion.identity, 0);
+        _canvas.enabled = false;
+        getCharacter();
+        if (string.IsNullOrEmpty(_character)) _character = "Ruby";
+        _inGameDisplay.enabled = true;
+        _chatControl.enabled = true;
+        var respawn = GameObject.FindGameObjectWithTag("Respawn");
+        var respawnPos = respawn ? respawn.transform.position + new Vector3(0, -1f, 0) : new Vector3(1, 1, 0);
+        PhotonNetwork.Instantiate(_character, respawnPos, Quaternion.identity);
+    }
+
+    public override void OnJoinedRoom()
+    {
+        _canvas.enabled = true;
+    }
+
+    public override void OnConnectedToMaster()
+    {
+        _chatControl.enabled = false;
+        _inGameDisplay.enabled = false;
     }
 }
