@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviourPunCallbacks
     [SerializeField] private LoginControl _loginControl;
     [SerializeField] private EnterRoomControl _enterRoomControl;
     [SerializeField] private LobbyControl _lobbyControl;
-    [SerializeField] private Volume _UIBackgroundVFX;
+    //[SerializeField] private Volume _UIBackgroundVFX;
 
     private bool _firstLogin = true;
 
@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviourPunCallbacks
         //PhotonNetwork.LoadLevel("Scene01");
         _enterRoomControl.SetActive(false);
         _lobbyControl.SetActive(false);
-        _UIBackgroundVFX.gameObject.SetActive(false);
+        //_UIBackgroundVFX.gameObject.SetActive(false);
     }
 
     public override void OnConnectedToMaster()
@@ -41,6 +41,6 @@ public class UIManager : MonoBehaviourPunCallbacks
         }
         else
             _enterRoomControl.SetActive(true);
-        _UIBackgroundVFX.gameObject.SetActive(true);
+        //_UIBackgroundVFX.gameObject.SetActive(true);
     }
 }

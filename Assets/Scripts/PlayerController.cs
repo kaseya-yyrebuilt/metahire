@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviourPun
     public static bool PlayerControlsEnabled { get; set; } = true;
 
     //===玩家朝向
-    private Vector2 _lookDirection = new(1, 0); //默认朝右边
+    private Vector2 _lookDirection = new Vector2(1, 0); //默认朝右边
     
     [SerializeField] private float _speed = 5f;
     [SerializeField] private Animator _anim;

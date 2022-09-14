@@ -2008,13 +2008,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f9d47fa3bbde1341a810e97e224c12c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  readyButton: {fileID: 1311640562}
-  RubyButton: {fileID: 731823449}
-  RobotButton: {fileID: 1529853250}
-  Canvas: {fileID: 1013636665}
-  RubyFrame: {fileID: 831387934}
-  RobotFrame: {fileID: 12333708}
-  PingText: {fileID: 1262583314}
+  _canvas: {fileID: 0}
+  _toggle: {fileID: 0}
+  _inGameDisplay: {fileID: 0}
+  _chatControl: {fileID: 0}
 --- !u!1001 &537074397
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13307,12 +13304,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 326f533cc2e666c48b5008718c5bf12d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisCanvasGroup: {fileID: 1875592004}
-  messageScrollRect: {fileID: 2053203725}
-  contentT: {fileID: 1015244431}
-  messageTextP: {fileID: 3077137616618898836, guid: c4707b006fe046246930db02aaa69ab8,
-    type: 3}
-  messageInputField: {fileID: 388394528}
+  _contentT: {fileID: 0}
+  _messageInputField: {fileID: 0}
+  _messageScrollRect: {fileID: 0}
+  _messageTextP: {fileID: 0}
+  _pingText: {fileID: 0}
+  _thisCanvas: {fileID: 0}
 --- !u!225 &1875592004
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -13530,8 +13527,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32093d15cfd4e440a4c42a37bc93982, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tipImage: {fileID: 1187971266}
-  enterRoomImage: {fileID: 1883073628}
+  _tipImage: {fileID: 0}
+  _enterRoomImage: {fileID: 0}
+  _voiceTriggerArea: {fileID: 0}
 --- !u!61 &1909166540
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -14327,13 +14325,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3457d613e654b9041a9618e6342cbcc4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  loginUI: {fileID: 0}
-  nameUI: {fileID: 0}
-  roomName: {fileID: 0}
-  nameInputField: {fileID: 0}
-  emailNameInputField: {fileID: 0}
-  passwordInputField: {fileID: 0}
-  errorText: {fileID: 0}
+  _loginUI: {fileID: 0}
+  _nameUI: {fileID: 0}
+  _roomName: {fileID: 0}
+  _nameInputField: {fileID: 0}
+  _emailNameInputField: {fileID: 0}
+  _passwordInputField: {fileID: 0}
+  _errorText: {fileID: 0}
 --- !u!4 &2116175769
 Transform:
   m_ObjectHideFlags: 0
@@ -15469,7 +15467,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114544145188764812}
   m_HandleRect: {fileID: 224208404865142812}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -16255,9 +16253,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114818613712531738}
+      - m_Target: {fileID: 1133092191750778}
         m_TargetAssemblyTypeName: 
-        m_MethodName: SendButtonPressed
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

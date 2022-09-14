@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class LobbyControl : MonoBehaviourPunCallbacks
 {
-    private readonly Dictionary<string, RoomItemControl> _roomItemsDic = new();
+    private readonly Dictionary<string, RoomItemControl> _roomItemsDic = new Dictionary<string, RoomItemControl>();
 
     [SerializeField] private EnterRoomControl _enterRoomControl;
     [SerializeField] private Button _backButton;
