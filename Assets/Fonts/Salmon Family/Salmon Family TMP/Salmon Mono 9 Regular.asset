@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Salmon Mono 9 Regular
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 2085554002
   material: {fileID: 4989675125979112067}
-  materialHashCode: 0
+  materialHashCode: 1817557810
   m_Version: 1.1.0
   m_SourceFontFileGUID: 80d14ced384c94410861b93a13586e6c
-  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 80d14ced384c94410861b93a13586e6c, type: 3}
+  m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 80d14ced384c94410861b93a13586e6c,
+    type: 3}
   m_SourceFontFile: {fileID: 0}
   m_AtlasPopulationMode: 0
   m_FaceInfo:
@@ -4788,7 +4789,7 @@ MonoBehaviour:
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
-  - regularTypeface: {fileID: 0}
+  - regularTypeface: {fileID: 11400000, guid: 800b071ce3e814e55ace3ea4707dcd51, type: 2}
     italicTypeface: {fileID: 0}
   - regularTypeface: {fileID: 0}
     italicTypeface: {fileID: 0}
@@ -4803,14 +4804,15 @@ MonoBehaviour:
   tabSize: 10
 --- !u!21 &4989675125979112067
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Salmon Mono 9 Regular Material
   m_Shader: {fileID: 4800000, guid: 128e987d567d4e2c824d754223b3f3b0, type: 3}
-  m_ShaderKeywords: 
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -4828,6 +4830,7 @@ Material:
         m_Texture: {fileID: 5102269888447140785}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _ColorMask: 15
     - _CullMode: 0

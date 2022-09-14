@@ -1,21 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
-using UnityEngine.UI;
+using UnityEngine;
 
 public class MenuNetworkChecker : MonoBehaviour
 {
     private void Start()
     {
-        if (PhotonNetwork.IsConnected == true)
+        if (PhotonNetwork.IsConnected)
         {
             PhotonNetwork.Disconnect();
-        }
-        else
-        {
-           
         }
     }
 }

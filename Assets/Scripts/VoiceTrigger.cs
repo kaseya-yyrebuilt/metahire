@@ -1,47 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
+using Photon.Pun;
 using Photon.Voice.PUN;
 using Photon.Voice.Unity;
+using TMPro;
+using UnityEngine;
 
 public class VoiceTrigger : MonoBehaviour
 {
-    public GameObject tipImage;//
+    [SerializeField] private TextMeshProUGUI _tipImage;
+    [SerializeField] private TextMeshProUGUI _enterRoomImage;
+    [SerializeField] private Collider2D _voiceTriggerArea;
 
-    public GameObject enterRoomImage;//
+    private bool _entered = false;
 
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        tipImage.SetActive(true);//
-        enterRoomImage.SetActive(false); //
+        if (!_voiceTriggerArea) _voiceTriggerArea = GetComponent<Collider2D>();
+        _tipImage.enabled = true;
+        _enterRoomImage.enabled = false;
+    }
+
+    private void Update()
+    {
+        if (_entered && Input.GetKeyDown(KeyCode.E))
+            ToggleDialog();
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetPhotonView().IsMine)
+            _entered = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetPhotonView().IsMine)
+        {
+            ToggleDialog(false);
+            _entered = false;
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (!_tipImage) Debug.LogWarning("Missing tip for triggering voice chat");
+        if (!_enterRoomImage) Debug.LogWarning("Missing tip for chatting");
     }
 
     /// <summary>
-    /// 
+    ///     Toggle the status of microphone and speaker
     /// </summary>
-
-    public void ShowDialog()
+    public void ToggleDialog(bool value)
     {
-        tipImage.SetActive(false);
-        enterRoomImage.SetActive(true);
-        PhotonVoiceNetwork.Instance.PrimaryRecorder.TransmitEnabled = true;
-        foreach (Speaker item in Component.FindObjectsOfType<Speaker>())
-        {
-            item.enabled = true;
-        }
+        _tipImage.enabled = !value;
+        _enterRoomImage.enabled = value;
+        //PhotonVoiceNetwork.Instance.PrimaryRecorder.TransmitEnabled = value;
+        //foreach (var item in FindObjectsOfType<Speaker>())
+        //{
+        //    item.enabled = value;
+        //}
     }
 
-    public void RemoveDialog()
+    public void ToggleDialog()
     {
-        tipImage.SetActive(true);
-        enterRoomImage.SetActive(false);
-        PhotonVoiceNetwork.Instance.PrimaryRecorder.TransmitEnabled = false;
-        foreach (Speaker item in Component.FindObjectsOfType<Speaker>())
-        {
-            item.enabled = false;
-        }
+        ToggleDialog(!_enterRoomImage.enabled);
     }
 }

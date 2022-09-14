@@ -1,49 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Photon.Pun;
+﻿using Photon.Pun;
 using Photon.Realtime;
-using UnityEngine.UI;
 using PlayFab;
 using PlayFab.ClientModels;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class NetworkLauncher : MonoBehaviourPunCallbacks
 {
-    public GameObject loginUI;
-    public GameObject nameUI;
-    public InputField roomName;
-    public InputField nameInputField;
-    public InputField emailNameInputField;
-    public InputField passwordInputField;
-    public Text errorText;
+    [SerializeField] private GameObject _loginUI;
+    [SerializeField] private GameObject _nameUI;
+    [SerializeField] private InputField _roomName;
+    [SerializeField] private InputField _nameInputField;
+    [SerializeField] private InputField _emailNameInputField;
+    [SerializeField] private InputField _passwordInputField;
+    [SerializeField] private Text _errorText;
 
     private void Start()
     {
-        nameInputField.onValueChanged.AddListener(input =>
-        {
-            errorText.text = string.Empty;
-        });
+        _nameInputField.onValueChanged.AddListener(input => { _errorText.text = string.Empty; });
 
-        emailNameInputField.onValueChanged.AddListener(input =>
-        {
-            errorText.text = string.Empty;
-        });
+        _emailNameInputField.onValueChanged.AddListener(input => { _errorText.text = string.Empty; });
 
-        passwordInputField.onValueChanged.AddListener(input =>
-        {
-            errorText.text = string.Empty;
-        });
+        _passwordInputField.onValueChanged.AddListener(input => { _errorText.text = string.Empty; });
 
         PlayFabSettings.TitleId = "9B23C";
 
         if (PhotonNetwork.IsConnected != true)
         {
             PhotonNetwork.ConnectUsingSettings();
-        }
-        else
-        {
-            // PhotonNetwork.Disconnect();
-            //PhotonNetwork.ConnectUsingSettings();
         }
     }
 
@@ -54,57 +38,60 @@ public class NetworkLauncher : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        nameUI.SetActive(true);
+        _nameUI.SetActive(true);
     }
 
     public void PlayButton()
     {
-        if (nameInputField.text == string.Empty)
+        if (_nameInputField.text == string.Empty)
         {
-            errorText.text = "The name cannot be empty!";
-            return;
-        }
-        else if (emailNameInputField.text == string.Empty)
-        {
-            errorText.text = "The email cannot be empty!";
-            return;
-        }
-        else if (passwordInputField.text == string.Empty)
-        {
-            errorText.text = "The password cannot be empty!";
+            _errorText.text = "The name cannot be empty!";
             return;
         }
 
-        PhotonNetwork.NickName = nameInputField.text;
-        LoginWithEmailAddressRequest request = new LoginWithEmailAddressRequest() { Email = emailNameInputField.text, Password = passwordInputField.text };
+        if (_emailNameInputField.text == string.Empty)
+        {
+            _errorText.text = "The email cannot be empty!";
+            return;
+        }
+
+        if (_passwordInputField.text == string.Empty)
+        {
+            _errorText.text = "The password cannot be empty!";
+            return;
+        }
+
+        PhotonNetwork.NickName = _nameInputField.text;
+        var request = new LoginWithEmailAddressRequest
+            {Email = _emailNameInputField.text, Password = _passwordInputField.text};
         PlayFabClientAPI.LoginWithEmailAddress(request,
-        loginResult =>
-        {
-            nameUI.SetActive(false);
-            loginUI.SetActive(true);
-            Debug.Log(loginResult.PlayFabId);
-        },
-        playfabError =>
-        {
-            errorText.text = playfabError.ErrorMessage;
-            Debug.LogError(playfabError.ErrorMessage);
-        });
+            loginResult =>
+            {
+                _nameUI.SetActive(false);
+                _loginUI.SetActive(true);
+                Debug.Log(loginResult.PlayFabId);
+            },
+            playfabError =>
+            {
+                _errorText.text = playfabError.ErrorMessage;
+                Debug.LogError(playfabError.ErrorMessage);
+            });
     }
 
     public void JoinOrCreateButton()
     {
-        if (roomName.text.Length < 2)
+        if (_roomName.text.Length < 2)
             return;
 
-        loginUI.SetActive(false);
+        _loginUI.SetActive(false);
 
-        RoomOptions options = new RoomOptions { MaxPlayers = 10 };
-        PhotonNetwork.JoinOrCreateRoom(roomName.text, options, default);
+        var options = new RoomOptions {MaxPlayers = 10};
+        PhotonNetwork.JoinOrCreateRoom(_roomName.text, options, default);
     }
 
     public void ShowLobbyButton()
     {
-        loginUI.SetActive(false);
+        _loginUI.SetActive(false);
         //LobbyControl.lobby.Show();
     }
 
@@ -119,6 +106,7 @@ public class NetworkLauncher : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel("menu");
         PhotonNetwork.Disconnect();
     }
+
     //for back to menu in game
     public void changeSceneInGame()
     {
@@ -126,6 +114,4 @@ public class NetworkLauncher : MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel("menu");
         //PhotonNetwork.Disconnect();
     }
-
 }
-
