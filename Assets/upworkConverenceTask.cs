@@ -1,8 +1,4 @@
-/* 
- * Copyright (C) 2021 because-why-not.com Limited
- * 
- * Please refer to the license.txt for license information
- */
+
 using Byn.Awrtc;
 using Byn.Awrtc.Unity;
 using System;
@@ -14,7 +10,7 @@ namespace Byn.Unity.Examples
 {
 
 
-    public class ConferenceApp : MonoBehaviour
+    public class upworkConverenceTask : MonoBehaviour
     {
         /// <summary>
         /// Length limit of signaling server address
@@ -136,20 +132,20 @@ namespace Byn.Unity.Examples
             UnityCallFactory.RequestLogLevelStatic(UnityCallFactory.LogLevel.Info);
             UnityCallFactory.EnsureInit(OnCallFactoryReady, OnCallFactoryFailed);
         }
-        
+
         protected virtual void OnCallFactoryReady()
         {
-                //to trigger android permission requests
-                StartCoroutine(ExampleGlobals.RequestPermissions());
-                //use video and audio by default (the UI is toggled on by default as well it will change on click )
-                MediaConfig.Video = false;
-                MediaConfig.Audio = false;
-                MediaConfig.VideoDeviceName = UnityCallFactory.Instance.GetDefaultVideoDevice();
+            //to trigger android permission requests
+            StartCoroutine(ExampleGlobals.RequestPermissions());
+            //use video and audio by default (the UI is toggled on by default as well it will change on click )
+            MediaConfig.Video = false;
+            MediaConfig.Audio = false;
+            MediaConfig.VideoDeviceName = UnityCallFactory.Instance.GetDefaultVideoDevice();
 
-                NetConfig.IceServers.Add(ExampleGlobals.DefaultIceServer);
-                NetConfig.SignalingUrl = ExampleGlobals.SignalingConference;
-                NetConfig.IsConference = true;
-                this.uRoomName.text = Application.productName + "_con";
+            NetConfig.IceServers.Add(ExampleGlobals.DefaultIceServer);
+            NetConfig.SignalingUrl = ExampleGlobals.SignalingConference;
+            NetConfig.IsConference = true;
+            this.uRoomName.text = Application.productName + "_con";
         }
 
         protected virtual void OnCallFactoryFailed(string error)
